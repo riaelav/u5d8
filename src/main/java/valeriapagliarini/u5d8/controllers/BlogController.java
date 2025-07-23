@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import valeriapagliarini.u5d8.entities.Blog;
+import valeriapagliarini.u5d8.payloads.BlogPayload;
 import valeriapagliarini.u5d8.services.BlogsService;
 
 import java.util.List;
@@ -30,8 +31,8 @@ public class BlogController {
     // POST crea un nuovo blog post
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Blog createBlog(@RequestBody Blog blog) {
-        return blogsService.save(blog);
+    public Blog createBlog(@RequestBody BlogPayload payload) {
+        return blogsService.save(payload);
     }
 
     // PUT aggiorna un blog post esistente

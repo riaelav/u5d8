@@ -30,19 +30,19 @@ public class AuthorController {
     }
 
 
-    // GET http://localhost:3001/authors/{authorId}
+    // GET http://localhost:3001/authors/id
     @GetMapping("/{authorId}")
     public Author getAuthorById(@PathVariable Long authorId) {
         return this.authorsService.findById(authorId);
     }
 
-    //  PUT http://localhost:3001/authors/{authorId} (+ payload)
+    //  PUT http://localhost:3001/authors/id (+ payload)
     @PutMapping("/{authorId}")
     public Author findAuthorByIdAndUpdate(@RequestBody NewAuthorPayload body, @PathVariable Long authorId) {
         return this.authorsService.findByIdAndUpdate(authorId, body);
     }
 
-    // DELETE http://localhost:3001/authors/{authorId}
+    // DELETE http://localhost:3001/authors/id
     @DeleteMapping("/{authorId}")
     @ResponseStatus(HttpStatus.NO_CONTENT) // 204
     public void findAuthorByIdAndDelete(@PathVariable Long authorId) {

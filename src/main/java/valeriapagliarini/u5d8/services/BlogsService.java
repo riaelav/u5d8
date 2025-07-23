@@ -2,8 +2,10 @@ package valeriapagliarini.u5d8.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import valeriapagliarini.u5d8.entities.Author;
 import valeriapagliarini.u5d8.entities.Blog;
 import valeriapagliarini.u5d8.exceptions.NotFoundException;
+import valeriapagliarini.u5d8.payloads.BlogPayload;
 import valeriapagliarini.u5d8.repositories.BlogsRepository;
 
 import java.util.List;
@@ -13,10 +15,13 @@ public class BlogsService {
 
     @Autowired
     private BlogsRepository blogsRepository;
+    @Autowired
+    private AuthorsService authorsService;
 
     // CREATE
-    public Blog save(Blog blog) {
-        blog.setCover("https://picsum.photos/200/300");
+    public Blog save(BlogPayload payload) {
+        Author author = authorsService.findById(payload.getAuthorId());
+        Blog blog = new Blog(payload.getCategoria(), payload.getTitolo(), "https://picsum.photos/200/300", payload.getContenuto(), payload.getTempoDiLettura(), author);
         return blogsRepository.save(blog);
     }
 

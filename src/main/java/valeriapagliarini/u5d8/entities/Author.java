@@ -18,6 +18,7 @@ public class Author {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Setter()
     private Long id;
 
     private String nome;

@@ -28,11 +28,12 @@ public class Blog {
     @JoinColumn(name = "author_id")
     private Author author;
 
-    public Blog(String categoria, String titolo, String cover, String contenuto, int tempoDiLettura) {
+    public Blog(String categoria, String titolo, String cover, String contenuto, int tempoDiLettura, Author author) {
         this.categoria = categoria;
         this.titolo = titolo;
         this.cover = cover;
         this.contenuto = contenuto;
         this.tempoDiLettura = tempoDiLettura;
+        this.author = author;
     }
 }
