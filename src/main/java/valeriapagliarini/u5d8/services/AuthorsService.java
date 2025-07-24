@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import valeriapagliarini.u5d8.entities.Author;
 import valeriapagliarini.u5d8.exceptions.BadRequestException;
 import valeriapagliarini.u5d8.exceptions.NotFoundException;
-import valeriapagliarini.u5d8.payloads.NewAuthorPayload;
+import valeriapagliarini.u5d8.payloads.NewAuthorDTO;
 import valeriapagliarini.u5d8.repositories.AuthorsRepository;
 
 @Service
@@ -21,20 +21,15 @@ public class AuthorsService {
     private AuthorsRepository authorsRepository;
 
     //SAVE
-    public Author save(NewAuthorPayload payload) {
+    public Author save(NewAuthorDTO payload) {
         // controllo che l'email non sia già in uso
-        authorsRepository.findByEmail(payload.getEmail()).ifPresent(author -> {
+        authorsRepository.findByEmail(payload.email()).ifPresent(author -> {
             throw new BadRequestException("L'email " + author.getEmail() + " è già in uso!");
         });
         // creo l'autore
-        Author newAuthor = new Author(
-                payload.getNome(),
-                payload.getCognome(),
-                payload.getEmail(),
-                payload.getDataDiNascita()
-        );
+        Author newAuthor = new Author(payload.nome(), payload.cognome(), payload.email(), payload.dataDiNascita());
         // avatar
-        newAuthor.setAvatar("https://ui-avatars.com/api/?name=" + payload.getNome() + "+" + payload.getCognome());
+        newAuthor.setAvatar("https://ui-avatars.com/api/?name=" + payload.nome() + "+" + payload.cognome());
 
         // salvataggio
         Author saved = authorsRepository.save(newAuthor);
@@ -58,20 +53,20 @@ public class AuthorsService {
     }
 
     //FIND AND UPDATE
-    public Author findByIdAndUpdate(Long id, NewAuthorPayload payload) {
+    public Author findByIdAndUpdate(Long id, NewAuthorDTO payload) {
         Author found = this.findById(id);
         //controllo che la mail non sia già in uso
-        if (!found.getEmail().equals(payload.getEmail())) {
-            authorsRepository.findByEmail(payload.getEmail()).ifPresent(author -> {
+        if (!found.getEmail().equals(payload.email())) {
+            authorsRepository.findByEmail(payload.email()).ifPresent(author -> {
                 throw new BadRequestException("L'email " + author.getEmail() + " è già in uso!");
             });
         }
 
-        found.setNome(payload.getNome());
-        found.setCognome(payload.getCognome());
-        found.setEmail(payload.getEmail());
-        found.setDataDiNascita(payload.getDataDiNascita());
-        found.setAvatar("https://ui-avatars.com/api/?name=" + payload.getNome() + "+" + payload.getCognome());
+        found.setNome(payload.nome());
+        found.setCognome(payload.cognome());
+        found.setEmail(payload.email());
+        found.setDataDiNascita(payload.dataDiNascita());
+        found.setAvatar("https://ui-avatars.com/api/?name=" + payload.nome() + "+" + payload.cognome());
 
         Author updated = authorsRepository.save(found);
         log.info("Autore con ID " + id + " aggiornato.");

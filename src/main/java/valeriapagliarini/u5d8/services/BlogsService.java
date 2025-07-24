@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import valeriapagliarini.u5d8.entities.Author;
 import valeriapagliarini.u5d8.entities.Blog;
 import valeriapagliarini.u5d8.exceptions.NotFoundException;
-import valeriapagliarini.u5d8.payloads.BlogPayload;
+import valeriapagliarini.u5d8.payloads.BlogDTO;
 import valeriapagliarini.u5d8.repositories.BlogsRepository;
 
 import java.util.List;
@@ -19,9 +19,9 @@ public class BlogsService {
     private AuthorsService authorsService;
 
     // CREATE
-    public Blog save(BlogPayload payload) {
-        Author author = authorsService.findById(payload.getAuthorId());
-        Blog blog = new Blog(payload.getCategoria(), payload.getTitolo(), "https://picsum.photos/200/300", payload.getContenuto(), payload.getTempoDiLettura(), author);
+    public Blog save(BlogDTO payload) {
+        Author author = authorsService.findById(payload.authorId());
+        Blog blog = new Blog(payload.categoria(), payload.titolo(), "https://picsum.photos/200/300", payload.contenuto(), payload.tempoDiLettura(), author);
         return blogsRepository.save(blog);
     }
 
@@ -43,14 +43,17 @@ public class BlogsService {
     }
 
     // UPDATE
-    public Blog findByIdAndUpdate(Long id, Blog body) {
-        Blog found = this.findById(id);
+    public Blog findBlogByIdAndUpdate(long blogId, BlogDTO payload) {
+        //riuso il metodo findBlogById
+        Blog found = findById(blogId);
 
-        found.setCover(body.getCover());
-        found.setCategoria(body.getCategoria());
-        found.setContenuto(body.getContenuto());
-        found.setTempoDiLettura(body.getTempoDiLettura());
-        found.setTitolo(body.getTitolo());
-        return blogsRepository.save(found);
+        found.setCategoria(payload.categoria());
+        found.setTitolo(payload.titolo());
+        found.setContenuto(payload.contenuto());
+        found.setTempoDiLettura(payload.tempoDiLettura());
+
+        Blog updatedBlog = blogsRepository.save(found);
+
+        return updatedBlog;
     }
 }

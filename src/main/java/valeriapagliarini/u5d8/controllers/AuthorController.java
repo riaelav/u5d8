@@ -3,9 +3,10 @@ package valeriapagliarini.u5d8.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import valeriapagliarini.u5d8.entities.Author;
-import valeriapagliarini.u5d8.payloads.NewAuthorPayload;
+import valeriapagliarini.u5d8.payloads.NewAuthorDTO;
 import valeriapagliarini.u5d8.services.AuthorsService;
 
 @RestController
@@ -25,7 +26,7 @@ public class AuthorController {
     //POST http://localhost:3001/authors (+ payload)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Author createAuthor(@RequestBody NewAuthorPayload body) {
+    public Author createAuthor(@RequestBody @Validated NewAuthorDTO body) {
         return this.authorsService.save(body);
     }
 
@@ -38,7 +39,7 @@ public class AuthorController {
 
     //  PUT http://localhost:3001/authors/id (+ payload)
     @PutMapping("/{authorId}")
-    public Author findAuthorByIdAndUpdate(@RequestBody NewAuthorPayload body, @PathVariable Long authorId) {
+    public Author findAuthorByIdAndUpdate(@RequestBody NewAuthorDTO body, @PathVariable Long authorId) {
         return this.authorsService.findByIdAndUpdate(authorId, body);
     }
 
